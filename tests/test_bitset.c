@@ -52,6 +52,11 @@ void test_toggle_bitset(void) {
     }
     bitset_reset(bitset);
 
+    TEST_ASSERT(bitset->cap == N);
+    TEST_ASSERT(!bitset->size);
+    for (uint64_t i = 0UL; i < bitset->cap; ++i)
+        TEST_ASSERT(!bitset_check(bitset, i));
+
     bitset_set(bitset, 0);
     bitset_set(bitset, 4);
     bitset_set(bitset, 7);
