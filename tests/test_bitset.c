@@ -29,7 +29,6 @@ void test_toggle_bitset(void) {
         TEST_ASSERT(bitset->size == (int){i / 2 + 1});
     }
 
-
     uint64_t cur_sz = bitset->size;
     for (int i = 0; i < bitset->cap; i += 2) {
         bitset_set(bitset, i);
@@ -51,6 +50,20 @@ void test_toggle_bitset(void) {
         bitset_clear(bitset, i);
         TEST_ASSERT(bitset->size == 0);
     }
+    bitset_reset(bitset);
+
+    bitset_set(bitset, 0);
+    bitset_set(bitset, 4);
+    bitset_set(bitset, 7);
+
+    uint64_t target1 = (1 << 0) + (1 << 4) + (1 << 7);
+    uint64_t target2 = (1 << 0) + (1 << 4);
+    uint64_t target3 = (1 << 4) + (1 << 7);
+
+    TEST_ASSERT(bitset_get_word(bitset, 0, 7) == target1);
+    TEST_ASSERT(bitset_get_word(bitset, 0, 4) == target2);
+    TEST_ASSERT(bitset_get_word(bitset, 4, 7) == target3);
+
     bitset_destroy(bitset);
 }
 

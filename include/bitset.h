@@ -36,9 +36,12 @@ struct bitset {
 #define bitset_mask(__bit) \
     (1ULL << ((__bit) % CHAR_BIT))
 
+#define bitset_alocsz(__size) \
+    (__size) / CHAR_BIT + (((__size) % CHAR_BIT) != 0)
+
 
 #define bitset_create(__size) ({                                            \
-    size_t bitset_sz = (__size) / CHAR_BIT + (((__size) % CHAR_BIT) != 0);  \
+    size_t bitset_sz = bitset_alocsz(__size);                               \
     char *base = (char*)calloc(1, bitset_sz + sizeof(struct bitset));       \
     ((struct bitset*)base)->cap = (__size);                                 \
     ((struct bitset*)base);                                                 \
@@ -69,6 +72,25 @@ struct bitset {
         __bitset->size -= (bitset_check(__bitset, __bit)) == 1;             \
         bit_arr[(__bit) / CHAR_BIT] &= ~(uint64_t){bitset_mask(__bit)};     \
     }                                                                       \
+} while (0)
+
+
+#define bitset_get_word(__bitset, __start, __end) ({                        \
+    uint64_t __word    = 0;                                                 \
+    if (0 <= (__start) && (__end) < (__bitset)->cap) {                      \
+        uint64_t __upper = __end - __start + 1;                             \
+        for (uint64_t __i = __start, __j = 0; __j < __upper; ++__i, ++__j)  \
+            __word += (bitset_check(__bitset, __i) << __i);                 \
+    }                                                                       \
+    __word;                                                                 \
+})
+
+
+#define bitset_reset(__bitset) do {                                         \
+    uint64_t bitset_sz = bitset_alocsz(((struct bitset*)(__bitset))->cap);  \
+    char *bit_arr = ((char*)(__bitset)) + sizeof(struct bitset);            \
+    memset(bit_arr, 0, bitset_sz);                                          \
+    ((struct bitset*)(__bitset))->size = 0;                                 \
 } while (0)
 
 
