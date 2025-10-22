@@ -41,6 +41,10 @@
     vector_insert(__queue_ptr, __entry)
 
 
+#define queue_get_front(__queue_ptr) \
+    ((__queue_ptr)[0])
+
+
 #define queue_remove_front(__queue_ptr) \
     vector_delete(__queue_ptr, 0)
 

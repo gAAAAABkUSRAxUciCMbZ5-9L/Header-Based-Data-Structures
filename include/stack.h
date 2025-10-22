@@ -5,8 +5,8 @@
 
 #define STACK_MIN_CAP VEC_MIN_CAP
 
-#define stack_create(__entry_sz, __cap, __stack_destructor, __is_ptr)  \
-    vector_create(__entry_sz, __cap, __stack_destructor, __is_ptr)
+#define stack_create(__type, __cap, __stack_destructor, __is_ptr)  \
+    vector_create(__type, __cap, __stack_destructor, __is_ptr)
 
 
 #define stack_get_size(__stack_ptr) \
@@ -42,6 +42,10 @@
 
 #define stack_insert_top(__stack_ptr, __entry)  \
     vector_insert(__stack_ptr, __entry)
+
+
+#define stack_get_top(__stack_ptr) \
+    ((__stack_ptr)[vector_get_size(&(__stack_ptr)) - 1])
 
 
 #define stack_remove_top(__stack_ptr)  \

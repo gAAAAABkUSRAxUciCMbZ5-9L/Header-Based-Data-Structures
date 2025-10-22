@@ -104,15 +104,15 @@ struct vector {
 
 
 
-#define vector_create(__entry_sz, __init_cap, __destructor, __ptr_flag) ({	\
-	uint64_t bytes = sizeof(struct vector) + (__init_cap) * (__entry_sz);	\
-	char *__vec = (char*)calloc(1, bytes) + sizeof(struct vector);			\
-	vector_set_size(&__vec, 0);												\
-	vector_set_cap(&__vec, (__init_cap));									\
-	vector_set_destructor(&__vec, (__destructor));							\
-	vector_set_entry_size(&__vec, (__entry_sz));							\
-	vector_set_flag(&__vec, (__ptr_flag));									\
-	(__vec);																\
+#define vector_create(__type, __init_cap, __destructor, __ptr_flag) ({			\
+	uint64_t bytes = sizeof(struct vector) + (__init_cap) * sizeof(__type);		\
+	char *__vec = (char*)calloc(1, bytes) + sizeof(struct vector);				\
+	vector_set_size(&__vec, 0);													\
+	vector_set_cap(&__vec, (__init_cap));										\
+	vector_set_destructor(&__vec, (__destructor));								\
+	vector_set_entry_size(&__vec, sizeof(__type));								\
+	vector_set_flag(&__vec, (__ptr_flag));										\
+	((__type*)__vec);															\
 })
 
 

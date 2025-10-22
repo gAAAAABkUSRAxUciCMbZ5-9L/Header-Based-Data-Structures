@@ -154,8 +154,9 @@ static struct person *create_persons(uint32_t size) {
 
 
 void test_map_create(void) {
-    struct map *map = map_create(sizeof(int), sizeof(struct person*), false, true,
-                                 MAP_MIN_CAP, hash_ints, cmp_ints, NULL, person_destructor);
+    struct map *map = map_create(int, struct person*, false, true,
+                                 MAP_MIN_CAP, hash_ints, cmp_ints,
+                                 NULL, person_destructor);
     TEST_ASSERT(map != NULL);
     TEST_ASSERT(map->size == 0);
     TEST_ASSERT(map->cap == MAP_MIN_CAP);
@@ -172,9 +173,8 @@ void test_map_create(void) {
 
 void test_map_insert(void) {
     int N = 10000;
-    struct map *map = map_create(sizeof(int*), sizeof(int*), true, 
-                                 true, MAP_MIN_CAP, hash_point_ints,
-                                 cmp_point_ints, free, free);
+    struct map *map = map_create(int*, int*, true, true, MAP_MIN_CAP,
+                                 hash_point_ints, cmp_point_ints, free, free);
 
     int **key_arr = malloc(N * sizeof(int*));
     int **val_arr = malloc(N * sizeof(int*));
@@ -214,9 +214,8 @@ void test_map_insert(void) {
     
     map_destroy(&map);
 
-    map = map_create(sizeof(int*), sizeof(int*), true, 
-                    true, MAP_MIN_CAP, hash_point_ints,
-                    cmp_point_ints, NULL, NULL);
+    map = map_create(int*, int*, true, true, MAP_MIN_CAP,
+                     hash_point_ints, cmp_point_ints, NULL, NULL);
 
     int key1 = 0;
     int key2 = 0;
@@ -231,8 +230,8 @@ void test_map_insert(void) {
 
     map_destroy(&map);
 
-    map = map_create(sizeof(char*), sizeof(int), true, false,
-                     MAP_MIN_CAP, hash_strings, cmp_strings, free, NULL);
+    map = map_create(char*, int, true, false, MAP_MIN_CAP,
+                     hash_strings, cmp_strings, free, NULL);
 
     for (int i = 0; i < N; ++i) {
         char buffer[1024] = { 0 };
@@ -266,13 +265,11 @@ void test_map_insert(void) {
 
 void test_map_delete(void) {
     int N = 10000;
-    struct map *map1 = map_create(sizeof(struct person), sizeof(int), 
-                                  false, false, MAP_MIN_CAP, hash_person_id,
-                                  cmp_person_id, person_destructor, NULL);
+    struct map *map1 = map_create(struct person, int, false, false, MAP_MIN_CAP,
+                                  hash_person_id, cmp_person_id, person_destructor, NULL);
 
-    struct map *map2 = map_create(sizeof(int*), sizeof(int*), true, 
-                                  true, MAP_MIN_CAP, hash_point_ints,
-                                  cmp_point_ints, free, free);
+    struct map *map2 = map_create(int*, int*, true, true, MAP_MIN_CAP,
+                                  hash_point_ints, cmp_point_ints, free, free);
 
 
     int **key_array = malloc(sizeof(int*) * N);

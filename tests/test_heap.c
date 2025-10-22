@@ -73,10 +73,10 @@ static bool is_valid_heap(struct heap *heap) {
 
 
 void test_heap_create(void) {
-    struct heap *h1 = heap_create(sizeof(int), HEAP_MIN_CAP,
-                                  NULL, cmp_decr_ints, false);
-    struct heap *h2 = heap_create(sizeof(int), HEAP_MIN_CAP,
-                                  NULL, cmp_incr_ints, false);
+    struct heap *h1 = heap_create(int, HEAP_MIN_CAP, NULL,
+                                  cmp_decr_ints, false);
+    struct heap *h2 = heap_create(int, HEAP_MIN_CAP, NULL,
+                                  cmp_incr_ints, false);
 
     TEST_ASSERT(h1 != NULL);
     TEST_ASSERT(h1->cmp_func == cmp_decr_ints);
@@ -85,7 +85,7 @@ void test_heap_create(void) {
     TEST_ASSERT(heap_get_top(h1) == NULL);
 
 
-    int nums[] = {-100, 20, -1821, 0};
+    int nums[] = { -100, 20, -1821, 0 };
     heap_init(h1, nums, ARRAY_SIZE(nums));
     heap_init(h2, nums, ARRAY_SIZE(nums));
     TEST_ASSERT(is_valid_heap(h1));
@@ -112,8 +112,7 @@ void test_heap_create(void) {
 void test_heap_insert(void) {
     int N = 10000;
     int *ptr = malloc(sizeof(int) * N);
-    struct heap *heap = heap_create(sizeof(int*), N, NULL,
-                                    cmp_point_ints, true);
+    struct heap *heap = heap_create(int*, N, NULL, cmp_point_ints, true);
 
     for (int i = 0; i < N; ++i) {
         ptr[i] = i;
@@ -129,8 +128,8 @@ void test_heap_insert(void) {
 
 void test_heap_delete(void) {
     int N = 10000;
-    struct heap *heap = heap_create(sizeof(int*), N, free,
-                                    cmp_point_ints, true);
+    struct heap *heap = heap_create(int*, N, free, cmp_point_ints, true);
+
     int **ptr = malloc(N * sizeof(int*));
     int **copy_ptr = malloc(N * sizeof(int*));
     for (size_t i = 0UL; i < N; ++i)
@@ -154,7 +153,7 @@ void test_heap_delete(void) {
     free(ptr);
     free(copy_ptr);
 
-    heap = heap_create(sizeof(int), HEAP_MIN_CAP, NULL,
+    heap = heap_create(int, HEAP_MIN_CAP, NULL,
                        cmp_decr_ints, false);
     
     for (int i = N; i >= 0; --i)

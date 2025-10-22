@@ -58,14 +58,14 @@ struct map_tuple {
 })
 
 
-#define map_create(__key_size, __value_size, __is_key_ptr, __is_value_ptr, __init_cap,                              \
+#define map_create(__key_type, __value_type, __is_key_ptr, __is_value_ptr, __init_cap,                              \
                    __hash_func, __cmp_keys, __key_destructor, __value_destructor) ({                                \
     uint64_t __final_cap = map_calc_cap(__init_cap);                                                                \
-    uint64_t __slot_sz   = __final_cap * ((__value_size) + (__key_size) + sizeof(int16_t));                         \
+    uint64_t __slot_sz   = __final_cap * (sizeof(__value_type) + sizeof(__key_type) + sizeof(int16_t));             \
     char *__base_ptr = (char*)calloc(1, sizeof(struct map) + __slot_sz);                                            \
     ((struct map*)__base_ptr)->cap = __final_cap;                                                                   \
-    ((struct map*)__base_ptr)->key_size = (__key_size);                                                             \
-    ((struct map*)__base_ptr)->value_size = (__value_size);                                                         \
+    ((struct map*)__base_ptr)->key_size = sizeof(__key_type);                                                       \
+    ((struct map*)__base_ptr)->value_size = sizeof(__value_type);                                                   \
     ((struct map*)__base_ptr)->hash_func = (__hash_func);                                                           \
     ((struct map*)__base_ptr)->key_destructor = (__key_destructor);                                                 \
     ((struct map*)__base_ptr)->value_destructor = (__value_destructor);                                             \

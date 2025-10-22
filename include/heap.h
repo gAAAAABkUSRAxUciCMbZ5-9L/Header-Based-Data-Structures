@@ -126,10 +126,10 @@ struct heap {
 } while (0)
 
 
-#define heap_create(__elem_sz, __init_cap, __destructor, __cmp_func, __ptr_flag) ({             \
+#define heap_create(__type, __init_cap, __destructor, __cmp_func, __ptr_flag) ({                \
     uint64_t __final_cap = heap_calc_cap(__init_cap);                                           \
     struct heap *__heap = (struct heap*)malloc(sizeof(struct heap));                            \
-    __heap->entries = (char*)vector_create(__elem_sz, __final_cap, __destructor, __ptr_flag);   \
+    __heap->entries = (char*)vector_create(__type, __final_cap, __destructor, __ptr_flag);      \
     __heap->cmp_func = (__cmp_func);                                                            \
     __heap;                                                                                     \
 })

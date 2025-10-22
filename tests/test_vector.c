@@ -88,9 +88,9 @@ static int cmp_person(void *a, void *b) {
 
 void test_vector_create(void) {
     int N = 32;
-    int **int_vec = (int**)vector_create(sizeof(int*), N, free, true);
-    struct person *person_vec = (struct person*)vector_create(sizeof(struct person), 2 * N,
-                                                              person_destructor, false);
+    int **int_vec = vector_create(int*, N, free, true);
+    struct person *person_vec = vector_create(struct person, 2 * N,
+                                              person_destructor, false);
 
     TEST_ASSERT(int_vec != NULL && person_vec != NULL);
     TEST_ASSERT(vector_get_cap(&int_vec) == N);
@@ -109,7 +109,7 @@ void test_vector_create(void) {
 
 void test_vector_insert(void) {
     int N = 100;
-    int *vec_ptr = (int*)vector_create(sizeof(int), VEC_MIN_CAP, NULL, false);
+    int *vec_ptr = vector_create(int, VEC_MIN_CAP, NULL, false);
 
     srand(time(NULL));
 
@@ -139,10 +139,9 @@ void test_vector_insert(void) {
 
 void test_vector_delete(void) {
     int N = 1000;
-    int *vec_ptr = (int*)vector_create(sizeof(int), VEC_MIN_CAP, NULL, false);
+    int *vec_ptr = vector_create(int, VEC_MIN_CAP, NULL, false);
 
     srand(time(NULL));
-
     for (int i = 0; i < N; ++i)
         vector_insert(&vec_ptr, i);
 
@@ -172,8 +171,8 @@ void test_vector_delete(void) {
 
 void test_vector_combine(void) {
     int N = 2000;
-    int *vec1 = (int*)vector_create(sizeof(int), N, NULL, false);
-    int *vec2 = (int*)vector_create(sizeof(int), N, NULL, false);
+    int *vec1 = vector_create(int, N, NULL, false);
+    int *vec2 = vector_create(int, N, NULL, false);
 
     for (int i = 0; i < N; ++i) {
         vector_insert(&vec1, i);
@@ -190,8 +189,8 @@ void test_vector_combine(void) {
 
     struct person *persons = create_persons(N);
 
-    struct person *vec3 = (struct person*)vector_create(sizeof(struct person), VEC_MIN_CAP, 
-                                                        person_destructor, false);
+    struct person *vec3 = vector_create(struct person, VEC_MIN_CAP, 
+                                        person_destructor, false);
     
     for (int i = 0; i < N; ++i) {
         vector_insert(&vec3, persons[i]);
