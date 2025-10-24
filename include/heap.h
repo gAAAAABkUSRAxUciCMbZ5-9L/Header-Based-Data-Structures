@@ -33,16 +33,14 @@ struct heap {
 
 
 
-#define heap_calc_cap(__init_cap) ({                                            \
-    __label__ __final;                                                          \
-    uint32_t __final_cap = 1;                                                   \
-    bool is_pow2 = (__init_cap) > 1                                             \
-        ? ((__init_cap) & ((__init_cap) - 1)) == 0                              \
-        : false;                                                                \
-    if (is_pow2 || __init_cap <= 1) goto __final;                               \
-    while (__final_cap < (__init_cap)) __final_cap <<= 1;                       \
-    __final:                                                                    \
-        (__final_cap == 1 ? is_pow2 ? __init_cap : HEAP_MIN_CAP : __final_cap); \
+#define heap_calc_cap(__init_cap) ({                                                \
+    __label__ __final;                                                              \
+    uint32_t __final_cap = 1;                                                       \
+    bool is_pow2 = (__init_cap) > 1 && ((__init_cap) & ((__init_cap) - 1)) == 0;    \
+    if (is_pow2 || __init_cap <= 1) goto __final;                                   \
+    while (__final_cap < (__init_cap)) __final_cap <<= 1;                           \
+    __final:                                                                        \
+        (__final_cap == 1 ? is_pow2 ? __init_cap : HEAP_MIN_CAP : __final_cap);     \
 })
 
 
