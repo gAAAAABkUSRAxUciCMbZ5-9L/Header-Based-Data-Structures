@@ -12,9 +12,6 @@
 #define stack_get_size(__stack_ptr) \
     vector_get_size(__stack_ptr)
 
-#define stack_get_size(__stack_ptr) \
-    vector_get_size(__stack_ptr)
-
 
 #define stack_get_cap(__stack_ptr) \
     vector_get_cap(__stack_ptr)
